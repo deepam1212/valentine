@@ -87,18 +87,21 @@
   const yesBtn = document.getElementById("yesBtn");
 
   function moveNoButton() {
-    const padding = 10;
-    const btnWidth = noBtn.offsetWidth;
-    const btnHeight = noBtn.offsetHeight;
+    const padding = 20;
+
+    const btnRect = noBtn.getBoundingClientRect();
+    const btnWidth = btnRect.width;
+    const btnHeight = btnRect.height;
 
     const maxX = window.innerWidth - btnWidth - padding;
     const maxY = window.innerHeight - btnHeight - padding;
 
-    const randomX = Math.random() * maxX;
-    const randomY = Math.random() * maxY;
+    // Always stay within visible screen
+    const randomX = Math.random() * maxX + padding;
+    const randomY = Math.random() * maxY + padding;
 
-    noBtn.style.left = randomX + "px";
-    noBtn.style.top = randomY + "px";
+    noBtn.style.left = `${randomX}px`;
+    noBtn.style.top = `${randomY}px`;
   }
 
   // Desktop
@@ -110,7 +113,7 @@
     moveNoButton();
   });
 
-  // Extra evil: block clicks completely
+  // Absolute safety: never clickable
   noBtn.addEventListener("click", (e) => {
     e.preventDefault();
     moveNoButton();
@@ -132,7 +135,13 @@
 
     setTimeout(() => emoji.remove(), 4000);
   }
+
+  // Initial position fix (prevents first jump glitch)
+  window.onload = () => {
+    moveNoButton();
+  };
 </script>
+
 
 
 </body>
